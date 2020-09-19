@@ -1,0 +1,44 @@
+:root {
+  --gap: 16px;
+  --max-width: 1248px;
+  --min-width: 320px;
+  --size-column: 156px;
+
+  --lighten-percentage: 20%;
+  --darken-precentage: 10%;
+  --color-dark: hsl(0, 0%, 0%);
+  --color-light: hsl(0, 0%, 100%);
+  --color-gray: hsl(0, 0%, 95%);
+  --color-primary: hsl(216, 100%, 50%);
+  --color-primary-hover: hsl(216, 100%, calc(50% - var(--darken-precentage)));
+  --color-accent: hsl(274, 50%, 42%);
+  --color-warning: hsl(40, 95%, 64%);
+  --color-danger: hsl(0, 53%, 57%);
+  --color-false: #C23131;
+  --color-success: hsl(176, 100%, 41%);
+  --color-true: #58A733;
+  --color-info: hsl(203, 81%, 55%);
+  --color-link: hsl(203, 81%, 55%);
+  --color-text: hsl(0, 0%, 0%);
+  --color-text-secondary: hsl(0, 0%, 38%);
+  --color-text-hint: hsl(207, 29%, 85%);
+  --color-border: hsl(0, 0%, 0%);
+  --color-bg: hsl(0, 0%, 92%);
+  --color-bg-dark: hsl(205, 44%, 92%);
+
+  --font-size-base: 16px;
+  --font-size-tiny: 12px;
+  --font-size-small: 14px;
+  --font-size-big: 18px;
+  --font-size-biger: 20px;
+  --font-size-legend: 22px;
+  --font-size-large: 28px;
+  --font-size-title: 30px;
+  --font-size-headline: 40px;
+
+  --font-family: 'Open Sans', sans-serif;
+
+  --border-raius: 8px;
+
+  --speed: 0.25s;
+}
