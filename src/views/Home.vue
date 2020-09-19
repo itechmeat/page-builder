@@ -1,8 +1,8 @@
 <template>
   <main-layout>
-    <Toolbar slot="sidebar" />
+    <Toolbar slot="sidebar" :active-type="activeType" />
 
-    <building-site />
+    <BuildingSite @drag="handleDrag" />
   </main-layout>
 </template>
 
@@ -12,9 +12,22 @@ import BuildingSite from "@/components/BuildingSite";
 
 export default {
   name: "Home",
+
   components: {
     Toolbar,
     BuildingSite
+  },
+
+  data() {
+    return {
+      activeType: null
+    };
+  },
+
+  methods: {
+    handleDrag(type) {
+      this.activeType = type;
+    }
   }
 };
 </script>

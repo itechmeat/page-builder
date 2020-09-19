@@ -6,12 +6,30 @@
         :key="index"
         class="toolbar__item"
       >
-        <div class="toolbar__control" role="button">
+        <div
+          :class="[
+            'toolbar__control',
+            { toolbar__control_active: activeType === control.type }
+          ]"
+          role="button"
+          draggable="true"
+          :data-control="control.type"
+        >
           <div class="toolbar__view">
             <ui-icon :name="control.type" :size="72" class="toolbar__icon" />
             <div v-if="control.label" class="toolbar__label">
               {{ control.label }}
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space" />
+
+      <div class="toolbar__item">
+        <div class="toolbar__control" role="button">
+          <div class="toolbar__view">
+            <ui-icon name="basket" :size="72" class="toolbar__icon" />
           </div>
         </div>
       </div>
@@ -22,6 +40,13 @@
 <script>
 export default {
   name: "Toolbar",
+
+  props: {
+    activeType: {
+      type: String,
+      default: null
+    }
+  },
 
   data() {
     return {
@@ -37,9 +62,6 @@ export default {
         {
           type: "text",
           label: "Text"
-        },
-        {
-          type: "basket"
         }
       ]
     };
@@ -53,7 +75,17 @@ export default {
 $block: ".toolbar";
 
 #{$block} {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
   padding: calc(var(--gap) * 3) var(--gap);
+
+  &__list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
 
   &__item {
     &:not(:first-child) {
@@ -71,6 +103,10 @@ $block: ".toolbar";
     border-radius: var(--border-raius);
     background: var(--color-gray);
     text-align: center;
+
+    &_active {
+      opacity: 0.5;
+    }
   }
 
   &__icon {
