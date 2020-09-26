@@ -19,6 +19,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/styles/_mixins.scss";
+
 $block: ".layout";
 
 #{$block} {
@@ -30,6 +32,13 @@ $block: ".layout";
     min-width: var(--min-width);
     min-height: 100vh;
     margin: 0 auto;
+
+    @include display(qhd) {
+      grid-template-columns: var(--size-column) 1fr calc(
+          var(--size-column) - var(--gap) * 2
+        );
+      max-width: calc(var(--max-width) + var(--size-column) - var(--gap) * 0.5);
+    }
   }
 
   &__sidebar,

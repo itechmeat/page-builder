@@ -2,14 +2,14 @@
   <div
     :class="[
       'building-site dropzone',
-      { 'building-site_active': idDragActive },
+      { 'building-site_active': dragActive },
       { 'building-site_focused': isDropZoneActive }
     ]"
     @dragover.prevent
     @drop.stop.prevent="handleDrop"
   >
     <div class="building-site__feed dropzone">
-      <template v-for="(block, index) in blocks">
+      <template v-for="(card, index) in cards">
         <BuildingGap
           v-if="index === 0 || 1 - (index % 3) === 0"
           :key="index + 0.5"
@@ -17,7 +17,12 @@
           :active="activeIndex === index"
         />
 
-        <BuildingBox :key="index * 2 + 1" :index="index" :type="block.type" />
+        <BuildingCard
+          :key="index * 2 + 1"
+          :index="index"
+          :value="card"
+          :active="index === cardIndex"
+        />
 
         <BuildingGap
           :key="index * 2 + 2"
@@ -30,20 +35,32 @@
 </template>
 
 <script>
-import BuildingBox from "@/components/BuildingSite/Box";
+import BuildingCard from "@/components/BuildingSite/Card";
 import BuildingGap from "@/components/BuildingSite/Gap";
 
 export default {
   name: "BuildingSite",
 
   components: {
-    BuildingBox,
+    BuildingCard,
     BuildingGap
+  },
+
+  props: {
+    dragActive: Boolean,
+    draggedType: {
+      type: String,
+      default: null
+    },
+    cardIndex: {
+      type: Number,
+      default: null
+    }
   },
 
   data() {
     return {
-      blocks: [
+      cards: [
         {
           type: "image",
           content: ""
@@ -68,37 +85,9 @@ export default {
           content: ""
         }
       ],
-      idDragActive: false,
       isDropZoneActive: false,
-      newIndex: null,
-      draggedType: null
+      newIndex: null
     };
-  },
-
-  mounted() {
-    document.addEventListener(
-      "dragstart",
-      event => this.handleDrag(event, true),
-      false
-    );
-
-    document.addEventListener(
-      "dragend",
-      event => this.handleDrag(event, false),
-      false
-    );
-
-    document.addEventListener(
-      "dragenter",
-      event => this.handleDropZone(event, true),
-      false
-    );
-
-    document.addEventListener(
-      "dragleave",
-      event => this.handleDropZone(event, false),
-      false
-    );
   },
 
   computed: {
@@ -111,20 +100,11 @@ export default {
         return 0;
       }
 
-      return this.newIndex || this.blocks.length;
+      return this.newIndex || this.cards.length;
     }
   },
 
   methods: {
-    handleDrag(event, state) {
-      this.idDragActive = state;
-      let type = null;
-      if (state) {
-        type = event.target.dataset.control;
-      }
-      this.draggedType = type;
-    },
-
     handleDropZone(event, state) {
       if (event.target.className.includes("dropzone")) {
         if (state) {
@@ -144,46 +124,37 @@ export default {
     },
 
     handleDrop() {
-      if (this.activeIndex) {
-        this.blocks.splice(this.activeIndex, 0, {
-          type: this.draggedType,
-          content: ""
-        });
+      if (this.activeIndex !== undefined) {
+        if (this.draggedType) {
+          this.cards.splice(this.activeIndex, 0, {
+            type: this.draggedType,
+            content: ""
+          });
+        }
+
+        if (this.cardIndex || this.cardIndex === 0) {
+          const card = this.cards[this.cardIndex];
+          if (this.cardIndex < this.activeIndex) {
+            this.cards.splice(this.activeIndex, 0, card);
+            this.cards.splice(this.cardIndex, 1);
+          } else {
+            this.cards.splice(this.cardIndex, 1);
+            this.cards.splice(this.activeIndex, 0, card);
+          }
+        }
       }
 
       this.$nextTick(() => {
+        this.$emit("clear");
         this.newIndex = null;
         this.dragged = null;
-        this.draggedType = null;
         this.isDropZoneActive = false;
       });
+    },
+
+    removeCard(index) {
+      this.cards.splice(index, 1);
     }
-  },
-
-  beforeDestroy() {
-    document.removeEventListener(
-      "dragstart",
-      event => this.handleDrag(event, true),
-      false
-    );
-
-    document.removeEventListener(
-      "dragend",
-      event => this.handleDrag(event, false),
-      false
-    );
-
-    document.removeEventListener(
-      "dragenter",
-      event => this.handleDropZone(event, true),
-      false
-    );
-
-    document.removeEventListener(
-      "dragleave",
-      event => this.handleDropZone(event, false),
-      false
-    );
   }
 };
 </script>

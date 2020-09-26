@@ -1,24 +1,26 @@
 <template>
   <div class="toolbar">
     <div class="toolbar__list">
-      <div
-        v-for="(control, index) in controls"
-        :key="index"
-        class="toolbar__item"
-      >
+      <div class="toolbar__main">
         <div
-          :class="[
+          v-for="(control, index) in controls"
+          :key="index"
+          class="toolbar__item"
+        >
+          <div
+            :class="[
             'toolbar__control',
             { toolbar__control_active: activeType === control.type }
           ]"
-          role="button"
-          draggable="true"
-          :data-control="control.type"
-        >
-          <div class="toolbar__view">
-            <ui-icon :name="control.type" :size="72" class="toolbar__icon" />
-            <div v-if="control.label" class="toolbar__label">
-              {{ control.label }}
+            role="button"
+            draggable="true"
+            :data-control="control.type"
+          >
+            <div class="toolbar__view">
+              <ui-icon :name="control.type" :size="72" class="toolbar__icon" />
+              <div v-if="control.label" class="toolbar__label">
+                {{ control.label }}
+              </div>
             </div>
           </div>
         </div>
@@ -27,7 +29,15 @@
       <div class="space" />
 
       <div class="toolbar__item">
-        <div class="toolbar__control" role="button">
+        <div
+          class="toolbar__control toolbar__delete dropbasket"
+          :class="[
+            { toolbar__delete_active: deleting },
+            { toolbar__delete_error: deletingError }
+          ]"
+          @dragover.prevent
+          @drop.stop.prevent="handleDrop"
+        >
           <div class="toolbar__view">
             <ui-icon name="basket" :size="72" class="toolbar__icon" />
           </div>
@@ -45,7 +55,9 @@ export default {
     activeType: {
       type: String,
       default: null
-    }
+    },
+    deleting: Boolean,
+    deletingError: Boolean
   },
 
   data() {
@@ -65,6 +77,12 @@ export default {
         }
       ]
     };
+  },
+
+  methods: {
+    handleDrop() {
+      this.$emit("delete");
+    }
   }
 };
 </script>
@@ -85,6 +103,12 @@ $block: ".toolbar";
     display: flex;
     flex-direction: column;
     min-height: 100%;
+  }
+
+  &__main {
+    flex: 1 0 calc(var(--gap) * 2);
+    position: sticky;
+    top: var(--gap);
   }
 
   &__item {
@@ -109,6 +133,10 @@ $block: ".toolbar";
     }
   }
 
+  &__view {
+    pointer-events: none;
+  }
+
   &__icon {
     margin: 0 auto;
   }
@@ -120,6 +148,24 @@ $block: ".toolbar";
     font-weight: bold;
     line-height: 1;
     text-transform: uppercase;
+  }
+
+  &__delete {
+    @include display(qhd) {
+      position: fixed;
+      bottom: var(--gap);
+      right: calc(50% - var(--max-width) / 2 - var(--gap) * 4.5);
+      width: calc(var(--size-column) - var(--gap) * 2);
+      background: var(--color-light);
+    }
+
+    &_active {
+      box-shadow: inset 0 0 10px rgba(#000, 0.5);
+    }
+
+    &_error {
+      background: var(--color-danger);
+    }
   }
 }
 </style>
