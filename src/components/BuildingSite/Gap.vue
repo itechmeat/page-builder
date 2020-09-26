@@ -1,6 +1,5 @@
 <template>
   <div :class="classes">
-    {{ index }}
     <div class="gap__dilator dropspace" :data-index="index" />
   </div>
 </template>

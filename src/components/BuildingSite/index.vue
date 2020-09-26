@@ -9,7 +9,7 @@
     @drop.stop.prevent="handleDrop"
   >
     <div class="building-site__feed dropzone">
-      <template v-for="(card, index) in cards">
+      <template v-for="(card, index) in value">
         <BuildingGap
           v-if="index === 0 || 1 - (index % 3) === 0"
           :key="index + 0.5"
@@ -47,6 +47,10 @@ export default {
   },
 
   props: {
+    value: {
+      type: Array,
+      default: () => []
+    },
     dragActive: Boolean,
     draggedType: {
       type: String,
@@ -60,31 +64,6 @@ export default {
 
   data() {
     return {
-      cards: [
-        {
-          type: "image",
-          content: ""
-        },
-        {
-          type: "text",
-          content: ""
-        },
-        {
-          type: "placeholder"
-        },
-        {
-          type: "image",
-          content: ""
-        },
-        {
-          type: "image",
-          content: ""
-        },
-        {
-          type: "text",
-          content: ""
-        }
-      ],
       isDropZoneActive: false,
       newIndex: null
     };
@@ -92,7 +71,7 @@ export default {
 
   computed: {
     activeIndex() {
-      if (!this.isDropZoneActive && this.newIndex === null) {
+      if ((!this.isDropZoneActive && this.newIndex === null) || !this.value) {
         return;
       }
 
@@ -100,7 +79,7 @@ export default {
         return 0;
       }
 
-      return this.newIndex || this.cards.length;
+      return this.newIndex || this.value.length;
     }
   },
 
@@ -126,20 +105,20 @@ export default {
     handleDrop() {
       if (this.activeIndex !== undefined) {
         if (this.draggedType) {
-          this.cards.splice(this.activeIndex, 0, {
+          this.value.splice(this.activeIndex, 0, {
             type: this.draggedType,
             content: ""
           });
         }
 
         if (this.cardIndex || this.cardIndex === 0) {
-          const card = this.cards[this.cardIndex];
+          const card = this.value[this.cardIndex];
           if (this.cardIndex < this.activeIndex) {
-            this.cards.splice(this.activeIndex, 0, card);
-            this.cards.splice(this.cardIndex, 1);
+            this.value.splice(this.activeIndex, 0, card);
+            this.value.splice(this.cardIndex, 1);
           } else {
-            this.cards.splice(this.cardIndex, 1);
-            this.cards.splice(this.activeIndex, 0, card);
+            this.value.splice(this.cardIndex, 1);
+            this.value.splice(this.activeIndex, 0, card);
           }
         }
       }
@@ -153,7 +132,7 @@ export default {
     },
 
     removeCard(index) {
-      this.cards.splice(index, 1);
+      this.value.splice(index, 1);
     }
   }
 };

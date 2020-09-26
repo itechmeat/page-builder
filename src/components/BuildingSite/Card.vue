@@ -1,12 +1,31 @@
 <template>
   <div :class="classes">
-    <div class="card__card" draggable="true" :data-card="index">
-      {{ index }}: type={{ value.type }}
+    <div class="card__box" draggable="true" :data-card="index">
+      <div
+        v-if="value.type !== 'placeholder'"
+        class="card__content"
+        @click.self="handleContentClick"
+      >
+        <div
+          ref="text"
+          v-if="value.type === 'text'"
+          class="card__text"
+          contenteditable
+          v-html="value.content || '&nbsp;'"
+          @blur="handleTextBlur"
+        />
+        <div v-else>{{ index }}: type={{ value.type }}</div>
+        <button ref="clear" class="card__clear" @click="handleClear">
+          <ui-icon name="close" :size="24" color class="card__icon" />
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { clearText } from "@/libs/utils";
+
 export default {
   name: "BuildingCard",
 
@@ -31,11 +50,30 @@ export default {
         { card_active: this.active }
       ];
     }
+  },
+
+  methods: {
+    handleContentClick() {
+      if (this.value.type === "text") {
+        this.$refs.text.focus();
+      }
+    },
+
+    handleTextBlur(e) {
+      this.value.content = clearText(e.target.innerHTML);
+    },
+
+    handleClear() {
+      this.value.content = null;
+      this.$refs.clear.blur();
+    }
   }
 };
 </script>
 
 <style lang="scss">
+@import "@/styles/_mixins.scss";
+
 $block: ".card";
 
 #{$block} {
@@ -49,22 +87,51 @@ $block: ".card";
     margin-top: 0;
   }
 
-  &__card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  &__box {
+    @extend %fill;
     border: 1px dashed var(--color-border);
-    background: #fff;
 
     #{$block}_active & {
       opacity: 0.3;
     }
+  }
+
+  &__content {
+    overflow: hidden;
+    position: absolute;
+    top: var(--gap);
+    right: var(--gap);
+    bottom: var(--gap);
+    left: var(--gap);
+    background: var(--color-bg);
+
+    #{$block}_text & {
+      cursor: text;
+    }
+
+    &:focus-within {
+      background: var(--color-text-hint);
+    }
+  }
+
+  &__text {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    height: 134px;
+    margin: var(--gap);
+    margin-right: calc(var(--gap) * 2);
+    line-height: 1.4;
+    outline: none;
+  }
+
+  &__clear {
+    @extend %resetButton;
+    position: absolute;
+    top: calc(var(--gap) / 2);
+    right: calc(var(--gap) / 2);
+    outline: none;
   }
 }
 </style>
