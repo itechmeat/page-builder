@@ -6,14 +6,19 @@
         class="card__content"
         @click.self="handleContentClick"
       >
-        <div
-          ref="text"
-          v-if="value.type === 'text'"
-          class="card__text"
-          contenteditable
-          v-html="value.content || '&nbsp;'"
-          @blur="handleTextBlur"
-        />
+        <template v-if="value.type === 'text'">
+          <div
+            ref="text"
+            class="card__text"
+            contenteditable
+            v-html="value.content || '&nbsp;'"
+            @blur="handleTextBlur"
+          />
+
+          <div v-if="!value.content" class="card__placeholder">
+            Input your text...
+          </div>
+        </template>
 
         <div ref="image" v-else-if="value.type === 'image'" class="card__image">
           <input v-if="!value.content" type="file" @change="handleFile" />
@@ -120,6 +125,7 @@ $block: ".card";
   flex: 0 0 calc(100% / 3 - var(--gap) * 4);
   height: 200px;
   margin-top: calc(var(--gap) * 3);
+  line-height: 1.4;
   cursor: move;
 
   &_first {
@@ -159,7 +165,6 @@ $block: ".card";
     height: 134px;
     margin: var(--gap);
     margin-right: calc(var(--gap) * 2);
-    line-height: 1.4;
   }
 
   &__text {
@@ -172,6 +177,18 @@ $block: ".card";
 
   &__image {
     cursor: default;
+  }
+
+  &__placeholder {
+    position: absolute;
+    top: var(--gap);
+    left: var(--gap);
+    pointer-events: none;
+    opacity: 0.3;
+
+    #{$block}__content:focus-within & {
+      display: none;
+    }
   }
 
   &__photo {
