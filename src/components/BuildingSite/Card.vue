@@ -14,8 +14,26 @@
           v-html="value.content || '&nbsp;'"
           @blur="handleTextBlur"
         />
+
+        <div ref="image" v-else-if="value.type === 'image'" class="card__image">
+          <input v-if="!value.content" type="file" @change="handleFile" />
+          <img
+            v-else
+            ref="photo"
+            :src="value.content"
+            alt=""
+            class="card__photo"
+          />
+        </div>
+
         <div v-else>{{ index }}: type={{ value.type }}</div>
-        <button ref="clear" class="card__clear" @click="handleClear">
+
+        <button
+          ref="clear"
+          v-if="value.content"
+          class="card__clear"
+          @click="handleClear"
+        >
           <ui-icon name="close" :size="24" color class="card__icon" />
         </button>
       </div>
@@ -63,9 +81,30 @@ export default {
       this.value.content = clearText(e.target.innerHTML);
     },
 
+    handleFile(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        this.value.content = reader.result;
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      } else {
+        this.value.content = null;
+      }
+    },
+
     handleClear() {
       this.value.content = null;
       this.$refs.clear.blur();
+
+      if (this.value.type === "image") {
+        const preview = this.$refs.photo;
+        this.value.content = null;
+        preview.src = "";
+      }
     }
   }
 };
@@ -81,6 +120,7 @@ $block: ".card";
   flex: 0 0 calc(100% / 3 - var(--gap) * 4);
   height: 200px;
   margin-top: calc(var(--gap) * 3);
+  cursor: move;
 
   &_first {
     flex: 0 0 calc(100% - var(--gap) * 6);
@@ -114,16 +154,33 @@ $block: ".card";
     }
   }
 
+  &__text,
+  &__image {
+    height: 134px;
+    margin: var(--gap);
+    margin-right: calc(var(--gap) * 2);
+    line-height: 1.4;
+  }
+
   &__text {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 6;
     -webkit-box-orient: vertical;
-    height: 134px;
-    margin: var(--gap);
-    margin-right: calc(var(--gap) * 2);
-    line-height: 1.4;
     outline: none;
+  }
+
+  &__image {
+    cursor: default;
+  }
+
+  &__photo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   &__clear {
