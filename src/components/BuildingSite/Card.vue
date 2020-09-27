@@ -21,7 +21,7 @@
         </template>
 
         <div ref="image" v-else-if="value.type === 'image'" class="card__image">
-          <input v-if="!value.content" type="file" @change="handleFile" />
+          <ui-upload-button v-if="!value.content" @change="handleFile" />
           <img
             v-else
             ref="photo"
@@ -150,6 +150,7 @@ $block: ".card";
     bottom: var(--gap);
     left: var(--gap);
     background: var(--color-bg);
+    cursor: default;
 
     #{$block}_text & {
       cursor: text;
