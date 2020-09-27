@@ -9,9 +9,9 @@
         >
           <div
             :class="[
-            'toolbar__control',
-            { toolbar__control_active: activeType === control.type }
-          ]"
+              'toolbar__control',
+              { toolbar__control_active: activeType === control.type }
+            ]"
             role="button"
             draggable="true"
             :data-control="control.type"
