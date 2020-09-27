@@ -3,13 +3,13 @@ Implement a drag’n’drop application within which you can add, move and sort 
 
 ### Requirements
 - [x] Create a simple application within which it is possible to add new placeholder elements in the existing layout.
-- [ ] Initially, the layout has no placeholders.
+- [x] Initially, the layout has no placeholders.
 - [x] Enable adding an arbitrary number of placeholders in the layout.
 - [x] Adding and moving/sorting placeholders is enabled with the use of drag’n’drop.
 - [x] The first placeholder on the layout is always acting like it is bigger than all the rest.
 - [x] Each placeholder it is possible then to add one textual element OR one picture.
 - [x] It is possible to remove the text or picture from the placeholder element.
-- [ ] Add readme.txt file with your assignment solution.
+- [x] Add readme.txt file with your assignment solution.
 
 ### Extra task
 - [x] Implement erasing of placeholders, so it can be pulled to the “trash-bin” icon.

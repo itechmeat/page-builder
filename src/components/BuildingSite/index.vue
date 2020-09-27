@@ -1,13 +1,5 @@
 <template>
-  <div
-    :class="[
-      'building-site dropzone',
-      { 'building-site_active': dragActive },
-      { 'building-site_focused': isDropZoneActive }
-    ]"
-    @dragover.prevent
-    @drop.stop.prevent="handleDrop"
-  >
+  <div :class="classes" @dragover.prevent @drop.stop.prevent="handleDrop">
     <div class="building-site__feed dropzone">
       <template v-for="(card, index) in value">
         <BuildingGap
@@ -70,6 +62,14 @@ export default {
   },
 
   computed: {
+    classes() {
+      return [
+        "building-site dropzone",
+        { "building-site_active": this.dragActive },
+        { "building-site_focused": this.isDropZoneActive }
+      ];
+    },
+
     activeIndex() {
       if ((!this.isDropZoneActive && this.newIndex === null) || !this.value) {
         return;

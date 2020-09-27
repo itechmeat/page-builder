@@ -30,11 +30,7 @@
 
       <div class="toolbar__item">
         <div
-          class="toolbar__control toolbar__delete dropbasket"
-          :class="[
-            { toolbar__delete_active: deleting },
-            { toolbar__delete_error: deletingError }
-          ]"
+          :class="basketClasses"
           @dragover.prevent
           @drop.stop.prevent="handleDrop"
         >
@@ -77,6 +73,18 @@ export default {
         }
       ]
     };
+  },
+
+  computed: {
+    basketClasses() {
+      return [
+        "dropbasket",
+        "toolbar__control",
+        "toolbar__delete",
+        { toolbar__delete_active: this.deleting },
+        { toolbar__delete_error: this.deletingError }
+      ];
+    }
   },
 
   methods: {

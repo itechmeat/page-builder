@@ -5,6 +5,7 @@
     :size="size"
     :title="name"
     :class="classes"
+    :radius="radius"
   />
 </template>
 
@@ -38,6 +39,9 @@ export default {
     size: {
       type: Number,
       default: 18
+    },
+    radius: {
+      type: Number
     },
     color: Boolean
   },

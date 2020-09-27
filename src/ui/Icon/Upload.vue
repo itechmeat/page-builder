@@ -11,13 +11,17 @@ export default {
   props: {
     size: {
       type: Number
+    },
+    radius: {
+      type: Number,
+      default: 6
     }
   },
 
   computed: {
     styles() {
       return {
-        borderRadius: this.size / 6 + "px"
+        borderRadius: this.size / this.radius + "px"
       };
     }
   }

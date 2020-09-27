@@ -33,37 +33,7 @@ export default {
 
   data() {
     return {
-      cards: [
-        {
-          type: "image",
-          content: null
-        },
-        {
-          type: "text",
-          content:
-            "Hey, hey, I've seen this one, I've seen this one. This is a classic, this is where Ralph dresses up as the man from space. Who? Next, please. This is for all you lovers out there. Who is that guy."
-        },
-        {
-          type: "placeholder"
-        },
-        {
-          type: "image",
-          content: null
-        },
-        {
-          type: "text",
-          content: null
-        },
-        {
-          type: "image",
-          content: null
-        },
-        {
-          type: "text",
-          content:
-            "I can't play. He's fine, and he's completely unaware that anything happened. As far as he's concerned the trip was instantaneous. That's why Einstein's watch is exactly one minute behind mine."
-        }
-      ],
+      cards: [],
       isDragActive: false,
       draggedType: null,
       cardIndex: null,

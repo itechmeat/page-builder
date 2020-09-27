@@ -1,6 +1,6 @@
 <template>
   <div :class="classes">
-    <div class="card__box" draggable="true" :data-card="index">
+    <div v-if="value" class="card__box" draggable="true" :data-card="index">
       <div
         v-if="value.type !== 'placeholder'"
         class="card__content"
@@ -30,8 +30,6 @@
             class="card__photo"
           />
         </div>
-
-        <div v-else>{{ index }}: type={{ value.type }}</div>
 
         <button
           ref="clear"
