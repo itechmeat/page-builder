@@ -73,28 +73,10 @@ $block: ".gap";
     position: absolute;
     top: 0;
     bottom: 0;
-    left: 50%;
-    width: calc(
-      (100vw - var(--size-column) - (var(--gap) * 13.5)) / 3 + var(--gap) * 3
-    );
-    max-width: calc(
-      (var(--max-width) - var(--size-column) - (var(--gap) * 13.5)) / 3 +
-        var(--gap) * 3
-    );
-    transform: translateX(-50%);
+    left: 0;
+    width: 100%;
     opacity: 0;
     pointer-events: none;
-
-    #{$block}:first-child &,
-    .box_first + #{$block} > & {
-      width: calc(
-        (100vw - var(--size-column) - (var(--gap) * 7.5)) + var(--gap) * 3
-      );
-      max-width: calc(
-        (var(--max-width) - var(--size-column) - (var(--gap) * 7.5)) +
-          var(--gap) * 3
-      );
-    }
 
     .building-site_active & {
       opacity: 1;
